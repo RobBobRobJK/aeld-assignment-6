@@ -23,6 +23,11 @@ else
 fi
 
 
+# Limit parallelism and disk use so the build does not exhaust RAM or disk
+for LIMITLINE in 'BB_NUMBER_THREADS = "6"' 'PARALLEL_MAKE = "-j 6"' 'INHERIT += "rm_work"'; do
+    grep -qxF "${LIMITLINE}" conf/local.conf || echo "${LIMITLINE}" >> conf/local.conf
+done
+
 bitbake-layers show-layers | grep "meta-aesd" > /dev/null
 layer_info=$?
 
